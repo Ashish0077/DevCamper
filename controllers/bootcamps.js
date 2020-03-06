@@ -24,11 +24,18 @@ async function getAllBootcamps(req, res, next) {
     @route   GET /api/v1/bootcamps/:id
     @access  Public  
 */
-function getBootcamp(req, res, next) {
-  res.status(200).json({
-    success: true,
-    msg: `get Bootcamp ${req.params.id}`
-  });
+async function getBootcamp(req, res, next) {
+  try {
+    const bootcamp = await Bootcamp.findById(req.params.id);
+    res.status(200).json({
+      success: true,
+      data: bootcamp
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false
+    });
+  }
 }
 
 /* 
