@@ -27,6 +27,11 @@ async function getAllBootcamps(req, res, next) {
 async function getBootcamp(req, res, next) {
   try {
     const bootcamp = await Bootcamp.findById(req.params.id);
+
+    if (!bootcamp) {
+      return res.status(400).json({ success: false });
+    }
+
     res.status(200).json({
       success: true,
       data: bootcamp
@@ -63,11 +68,28 @@ async function createBootcamp(req, res, next) {
     @route   PUT /api/v1/bootcamps/:id
     @access  Private  
 */
-function updateBootcamp(req, res, next) {
-  res.status(200).json({
-    success: true,
-    msg: `Update Bootcamp ${req.params.id}`
-  });
+async function updateBootcamp(req, res, next) {
+  try {
+    const bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true
+    });
+
+    if (!bootcamp) {
+      return res.status(400).json({
+        success: false
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: bootcamp
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false
+    });
+  }
 }
 
 /* 
