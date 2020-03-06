@@ -19,6 +19,9 @@ if (process.env.NODE_ENV == "development") {
   app.use(morgon("dev"));
 }
 
+// body parser
+app.use(express.json());
+
 const PORT = process.env.PORT || 3000;
 
 // Mount Router
