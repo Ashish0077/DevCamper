@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const morgon = require("morgan");
 const connectDB = require("./config/db");
+const errorHandler = require("./middleware/error");
 
 // Load Environemnt Variables
 dotenv.config({ path: "./config/config.env" });
@@ -26,6 +27,8 @@ const PORT = process.env.PORT || 3000;
 
 // Mount Router
 app.use("/api/v1/bootcamps", bootcamps);
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
