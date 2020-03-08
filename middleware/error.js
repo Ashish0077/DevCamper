@@ -5,12 +5,26 @@ function errorHandler(err, req, res, next) {
   error.message = err.message;
 
   // log for the developer
-  console.log(err.stack.red);
+  console.log(err);
 
   // mongoose bad ObjectID
   if (err.name == "CastError") {
     const message = `Bootcamp not found with ID : ${err.value}`;
     error = new ErrorResponse(message, 404);
+  }
+
+  // mongoose duplicate key
+  if (err.code == 11000) {
+    const message = `Duplicate Field Value entered : ${JSON.stringify(
+      err.keyValue
+    )}`;
+    error = new ErrorResponse(message, 400);
+  }
+
+  // mongoose validation error
+  if (err.name == "ValidationError") {
+    const message = Object.values(err.errors).map(value => value.message);
+    error = new ErrorResponse(message, 400);
   }
 
   res.status(error.statusCode || 500).json({
