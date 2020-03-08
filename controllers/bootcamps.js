@@ -1,5 +1,4 @@
 const Bootcamp = require("../models/Bootcamp");
-const ErrorResponse = require("../utils/errorResponse");
 
 /* 
     @desc    get all bootcamps
@@ -14,7 +13,9 @@ async function getAllBootcamps(req, res, next) {
       data: bootcamps
     });
   } catch (error) {
-    next(new ErrorResponse("Unable to get bootcamps", 400));
+    res.status(400).json({
+      success: false
+    });
   }
 }
 
@@ -28,9 +29,7 @@ async function getBootcamp(req, res, next) {
     const bootcamp = await Bootcamp.findById(req.params.id);
 
     if (!bootcamp) {
-      return next(
-        new ErrorResponse(`Bootcamp not found with ID:${req.params.id}`, 404)
-      );
+      return res.status(400).json({ success: false });
     }
 
     res.status(200).json({
@@ -38,7 +37,10 @@ async function getBootcamp(req, res, next) {
       data: bootcamp
     });
   } catch (error) {
-    next(new ErrorResponse(`Bootcamp not found with ID:${req.params.id}`, 404));
+    // res.status(400).json({
+    //   success: false
+    // });
+    next(error);
   }
 }
 
@@ -56,7 +58,9 @@ async function createBootcamp(req, res, next) {
       data: newBootcamp
     });
   } catch (error) {
-    next(new ErrorResponse("Unable to create bootcamp", 400));
+    res.status(400).json({
+      success: false
+    });
   }
 }
 
@@ -73,7 +77,9 @@ async function updateBootcamp(req, res, next) {
     });
 
     if (!bootcamp) {
-      return next(new ErrorResponse("Unable to update bootcamp", 400));
+      return res.status(400).json({
+        success: false
+      });
     }
 
     res.status(200).json({
@@ -81,7 +87,9 @@ async function updateBootcamp(req, res, next) {
       data: bootcamp
     });
   } catch (error) {
-    next(new ErrorResponse("Unable to update bootcamp", 400));
+    res.status(400).json({
+      success: false
+    });
   }
 }
 
@@ -94,7 +102,9 @@ async function deleteBootcamp(req, res, next) {
   try {
     const deletedBootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
     if (!deletedBootcamp) {
-      return next(new ErrorResponse("Unable to delete bootcamp", 400));
+      return res.status(400).json({
+        success: false
+      });
     }
 
     res.status(200).json({
@@ -102,7 +112,9 @@ async function deleteBootcamp(req, res, next) {
       data: {}
     });
   } catch (error) {
-    next(new ErrorResponse("Unable to delete bootcamp", 400));
+    res.status(400).json({
+      success: false
+    });
   }
 }
 

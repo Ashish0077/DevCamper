@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const morgon = require("morgan");
+const colors = require("colors");
 const connectDB = require("./config/db");
 const errorHandler = require("./middleware/error");
 
@@ -31,5 +32,5 @@ app.use("/api/v1/bootcamps", bootcamps);
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`);
+  console.log(`App listening on port ${PORT}`.yellow.bold);
 });
