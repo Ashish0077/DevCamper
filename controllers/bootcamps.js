@@ -9,13 +9,24 @@ const geoCoder = require("../utils/geoCoder");
     @access  Public  
 */
 const getAllBootcamps = asyncHandler(async (req, res, next) => {
+  // extracting select fields and fixing the query
+  let fields;
+  if (req.query.select != undefined) {
+    fields = req.query.select.split(",").join(" ");
+    fields.trim();
+    if (fields.length == 0 || fields == "all") {
+      fields = undefined;
+    }
+    delete req.query.select;
+  }
+
+  // adding dollar operator for mongoose in the query
   let queryStr = JSON.stringify(req.query);
   queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
 
   req.query = JSON.parse(queryStr);
-  console.log(req.query);
 
-  const bootcamps = await Bootcamp.find(req.query);
+  const bootcamps = await Bootcamp.find(req.query).select(fields);
   res.status(200).json({
     success: true,
     count: bootcamps.length,
