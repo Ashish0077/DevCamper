@@ -17,6 +17,7 @@
     "express": "^4.17.1",
     "mongoose": "^5.9.2",
     "morgan": "^1.9.1",
+    "node-geocoder": "^3.25.0",
     "slugify": "^1.4.0"
   }
 }
