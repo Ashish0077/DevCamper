@@ -82,7 +82,7 @@ const BootcampSchema = new mongoose.Schema({
     max: [10, "can not be more than 10"]
   },
 
-  avergaeCost: {
+  averageCost: {
     type: Number
   },
 
