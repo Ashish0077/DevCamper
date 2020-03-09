@@ -1,3 +1,7 @@
+# ignore these folders/files
 node_modules/
 config/
-_data/
+_data/*
+
+# do not ignore these folders/files
+!_data/bootcamps.json
