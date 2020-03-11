@@ -19,6 +19,8 @@ const getAllBootcamps = asyncHandler(async (req, res, next) => {
     }
     delete req.query.select;
   }
+
+  // extracting sorting parameters
   let sortBy;
   if (req.query.sort) {
     sortBy = req.query.sort.split(",").join(" ");
@@ -26,6 +28,15 @@ const getAllBootcamps = asyncHandler(async (req, res, next) => {
   } else {
     sortBy = "-createdAt";
   }
+
+  // pagination
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 25;
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+  const total = await Bootcamp.countDocuments();
+  if (req.query.page) delete req.query.page;
+  if (req.query.limit) delete req.query.limit;
 
   // adding dollar operator for mongoose in the query
   let queryStr = JSON.stringify(req.query);
@@ -35,10 +46,30 @@ const getAllBootcamps = asyncHandler(async (req, res, next) => {
 
   const bootcamps = await Bootcamp.find(req.query)
     .select(fields)
-    .sort(sortBy);
+    .sort(sortBy)
+    .skip(startIndex)
+    .limit(limit);
+
+  const pagination = {};
+
+  if (endIndex < total) {
+    pagination.next = {
+      page: page + 1,
+      limit: limit
+    };
+  }
+
+  if (startIndex > 0) {
+    pagination.prev = {
+      page: page - 1,
+      limit: limit
+    };
+  }
+
   res.status(200).json({
     success: true,
     count: bootcamps.length,
+    pagination: pagination,
     data: bootcamps
   });
 });
