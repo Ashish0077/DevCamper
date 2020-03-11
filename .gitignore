@@ -5,3 +5,4 @@ _data/*
 
 # do not ignore these folders/files
 !_data/bootcamps.json
+!_data/courses.json
