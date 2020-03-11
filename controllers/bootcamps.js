@@ -19,6 +19,13 @@ const getAllBootcamps = asyncHandler(async (req, res, next) => {
     }
     delete req.query.select;
   }
+  let sortBy;
+  if (req.query.sort) {
+    sortBy = req.query.sort.split(",").join(" ");
+    delete req.query.sort;
+  } else {
+    sortBy = "-createdAt";
+  }
 
   // adding dollar operator for mongoose in the query
   let queryStr = JSON.stringify(req.query);
@@ -26,7 +33,9 @@ const getAllBootcamps = asyncHandler(async (req, res, next) => {
 
   req.query = JSON.parse(queryStr);
 
-  const bootcamps = await Bootcamp.find(req.query).select(fields);
+  const bootcamps = await Bootcamp.find(req.query)
+    .select(fields)
+    .sort(sortBy);
   res.status(200).json({
     success: true,
     count: bootcamps.length,
