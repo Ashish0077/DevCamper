@@ -141,12 +141,14 @@ const updateBootcamp = asyncHandler(async (req, res, next) => {
     @access  Private  
 */
 const deleteBootcamp = asyncHandler(async (req, res, next) => {
-  const deletedBootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
+  const deletedBootcamp = await Bootcamp.findById(req.params.id);
   if (!deletedBootcamp) {
     return next(
       new ErrorResponse(`Bootcamp Not found with ID : ${req.params.id}`, 404)
     );
   }
+
+  deletedBootcamp.remove();
 
   res.status(200).json({
     success: true,
