@@ -45,6 +45,10 @@ const getAllBootcamps = asyncHandler(async (req, res, next) => {
   req.query = JSON.parse(queryStr);
 
   const bootcamps = await Bootcamp.find(req.query)
+    .populate({
+      path: "courses",
+      select: "title description weeks"
+    })
     .select(fields)
     .sort(sortBy)
     .skip(startIndex)
