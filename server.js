@@ -4,6 +4,8 @@ const morgon = require("morgan");
 const colors = require("colors");
 const connectDB = require("./config/db");
 const errorHandler = require("./middleware/error");
+const fileUpload = require("express-fileupload");
+const path = require("path");
 
 // Load Environemnt Variables
 dotenv.config({ path: "./config/config.env" });
@@ -21,6 +23,12 @@ const app = express();
 if (process.env.NODE_ENV == "development") {
   app.use(morgon("dev"));
 }
+
+// file upload
+app.use(fileUpload());
+
+// setting static folder
+app.use(express.static(path.join(__dirname, "public")));
 
 // body parser
 app.use(express.json());
