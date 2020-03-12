@@ -112,13 +112,15 @@ const updateCourse = asyncHandler(async (req, res, next) => {
     @access  Private
 */
 const deleteCourse = asyncHandler(async (req, res, next) => {
-  const course = await Course.findByIdAndDelete(req.params.id);
+  const course = await Course.findById(req.params.id);
 
   if (!course) {
     return next(
       new ErrorResponse(`No Course found with ID : ${req.params.id}`, 404)
     );
   }
+
+  course.remove();
 
   res.status(200).json({
     success: true,
