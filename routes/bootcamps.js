@@ -1,4 +1,6 @@
 const express = require("express");
+const advanceQuery = require("../middleware/advanceQuery");
+const Bootcamp = require("../models/Bootcamp");
 
 const {
   getAllBootcamps,
@@ -22,7 +24,13 @@ router.route("/:id/photo").put(uploadBootcampPhoto);
 
 router
   .route("/")
-  .get(getAllBootcamps)
+  .get(
+    advanceQuery(Bootcamp, {
+      path: "courses",
+      select: "name description"
+    }),
+    getAllBootcamps
+  )
   .post(createBootcamp);
 
 router
