@@ -42,5 +42,5 @@ app.use("/api/v1/courses", courses);
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`.yellow.bold);
+  console.log(`App Running at: `.yellow.bold, `https://localhost:${PORT}`.underline.bgBlack.white);
 });
