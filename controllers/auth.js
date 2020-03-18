@@ -22,8 +22,11 @@ const registerUser = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse("Unable to create User", 500));
   }
 
+  const token = user.getSignedJwtToken();
+
   res.status(200).json({
-    success: true
+    success: true,
+    token: token
   });
 });
 
