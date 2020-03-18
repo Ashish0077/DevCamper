@@ -1,6 +1,7 @@
 const express = require("express");
 const advanceQuery = require("../middleware/advanceQuery");
 const Course = require("../models/Course");
+const protect = require("../middleware/auth");
 
 const {
   getAllCourses,
@@ -21,12 +22,12 @@ router
     }),
     getAllCourses
   )
-  .post(addCourse);
+  .post(protect, addCourse);
 
 router
   .route("/:id")
   .get(getSingleCourse)
-  .put(updateCourse)
-  .delete(deleteCourse);
+  .put(protect, updateCourse)
+  .delete(protect, deleteCourse);
 
 module.exports = router;
