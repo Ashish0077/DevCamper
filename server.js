@@ -6,6 +6,7 @@ const connectDB = require("./config/db");
 const errorHandler = require("./middleware/error");
 const fileUpload = require("express-fileupload");
 const path = require("path");
+const cookieParser = require("cookie-parser");
 
 // Load Environemnt Variables
 dotenv.config({ path: "./config/config.env" });
@@ -33,6 +34,9 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // body parser
 app.use(express.json());
+
+// cookie parser
+app.use(cookieParser());
 
 const PORT = process.env.PORT || 3000;
 
