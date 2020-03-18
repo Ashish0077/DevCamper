@@ -34,4 +34,20 @@ const protect = asyncHandler(async (req, res, next) => {
   }
 });
 
-module.exports = protect;
+// Only Authenticate specific roles
+const authenticateRoles = roles => (req, res, next) => {
+  if (!roles.includes(req.user.role)) {
+    return next(
+      new ErrorResponse(
+        `${req.user.role} Role is not authorized for this action`,
+        403
+      )
+    );
+  }
+  next();
+};
+
+module.exports = {
+  protect,
+  authenticateRoles
+};
