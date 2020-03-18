@@ -10,7 +10,7 @@ const asyncHandler = require("../middleware/asyncHandler");
     @access  Public  
 */
 const getAllCourses = asyncHandler(async (req, res, next) => {
-  let query;
+  /* let query;
 
   if (req.params.bootcampId) {
     query = Course.find({ bootcamp: req.params.bootcampId });
@@ -27,7 +27,9 @@ const getAllCourses = asyncHandler(async (req, res, next) => {
     success: true,
     count: courses.length,
     data: courses
-  });
+  }); */
+
+  res.status(200).json(res.advanceQuery);
 });
 
 /* 

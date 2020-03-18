@@ -1,4 +1,6 @@
 const express = require("express");
+const advanceQuery = require("../middleware/advanceQuery");
+const Course = require("../models/Course");
 
 const {
   getAllCourses,
@@ -12,7 +14,13 @@ const router = express.Router({ mergeParams: true });
 
 router
   .route("/")
-  .get(getAllCourses)
+  .get(
+    advanceQuery(Course, {
+      path: "bootcamp",
+      select: "name description"
+    }),
+    getAllCourses
+  )
   .post(addCourse);
 
 router
