@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const fs = require("fs");
 const mongoose = require("mongoose");
 const colors = require("colors");
@@ -37,9 +39,9 @@ const users = JSON.parse(
 // import into db
 async function importData() {
   try {
+    await User.create(users);
     await Bootcamp.create(bootcamps);
     await Course.create(courses);
-    await User.create(users);
     console.log("Data Improted...".green.inverse);
     process.exit(0);
   } catch (error) {
