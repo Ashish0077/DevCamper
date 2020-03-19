@@ -29,8 +29,8 @@ router
   .route("/")
   .get(
     advanceQuery(Bootcamp, {
-      path: "courses",
-      select: "name description"
+      path: "courses publisher",
+      select: "title description name email"
     }),
     getAllBootcamps
   )
