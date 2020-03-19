@@ -61,7 +61,7 @@ const advanceQuery = (model, populate) => async (req, res, next) => {
 
   res.advanceQuery = {
     success: true,
-    count: model.length,
+    count: results.length,
     pagination: pagination,
     data: results
   };

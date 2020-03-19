@@ -74,16 +74,35 @@ const createBootcamp = asyncHandler(async (req, res, next) => {
     @access  Private  
 */
 const updateBootcamp = asyncHandler(async (req, res, next) => {
-  const bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true
-  });
+  // current user
+  const currentUser = req.user;
+
+  // finding bootcamp with provided id
+  let bootcamp = await Bootcamp.findById(req.params.id);
 
   if (!bootcamp) {
     return next(
       new ErrorResponse(`Bootcamp Not found with ID : ${req.params.id}`, 404)
     );
   }
+
+  // making sure if the user owns the bootcamp or not
+  if (bootcamp.publisher != currentUser.id && currentUser.role != "admin") {
+    return next(
+      new ErrorResponse(
+        `User with ID: ${currentUser.id} is not authorized for updating bootcamp with ID: ${bootcamp.id}`,
+        403
+      )
+    );
+  }
+
+  // extracting updated data
+  const updateData = req.body;
+
+  bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, updateData, {
+    new: true,
+    runValidators: true
+  });
 
   res.status(200).json({
     success: true,
@@ -97,14 +116,29 @@ const updateBootcamp = asyncHandler(async (req, res, next) => {
     @access  Private  
 */
 const deleteBootcamp = asyncHandler(async (req, res, next) => {
-  const deletedBootcamp = await Bootcamp.findById(req.params.id);
-  if (!deletedBootcamp) {
+  // current user
+  const currentUser = req.user;
+
+  // finding bootcamp with provided id
+  let bootcamp = await Bootcamp.findById(req.params.id);
+
+  if (!bootcamp) {
     return next(
       new ErrorResponse(`Bootcamp Not found with ID : ${req.params.id}`, 404)
     );
   }
 
-  deletedBootcamp.remove();
+  // making sure if the user owns the bootcamp or not
+  if (bootcamp.publisher != currentUser.id && currentUser.role != "admin") {
+    return next(
+      new ErrorResponse(
+        `User with ID: ${currentUser.id} is not authorized for deleting bootcamp with ID: ${bootcamp.id}`,
+        403
+      )
+    );
+  }
+
+  bootcamp.remove();
 
   res.status(200).json({
     success: true,
@@ -153,10 +187,25 @@ const getBootcampsInRadius = asyncHandler(async (req, res, next) => {
     @access  Private
 */
 const uploadBootcampPhoto = asyncHandler(async (req, res, next) => {
-  const bootcamp = await Bootcamp.findById(req.params.id);
+  // current user
+  const currentUser = req.user;
+
+  // finding bootcamp with provided id
+  let bootcamp = await Bootcamp.findById(req.params.id);
+
   if (!bootcamp) {
     return next(
       new ErrorResponse(`Bootcamp Not found with ID : ${req.params.id}`, 404)
+    );
+  }
+
+  // making sure if the user owns the bootcamp or not
+  if (bootcamp.publisher != currentUser.id && currentUser.role != "admin") {
+    return next(
+      new ErrorResponse(
+        `User with ID: ${currentUser.id} is not authorized for deleting bootcamp with ID: ${bootcamp.id}`,
+        403
+      )
     );
   }
 
