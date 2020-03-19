@@ -40,6 +40,9 @@ const getSingleCourse = asyncHandler(async (req, res, next) => {
     @access  Private
 */
 const addCourse = asyncHandler(async (req, res, next) => {
+  // Current User
+  const currentUser = req.user;
+
   req.body.bootcamp = req.params.bootcampId;
 
   const bootcamp = await Bootcamp.findById(req.params.bootcampId);
@@ -49,6 +52,15 @@ const addCourse = asyncHandler(async (req, res, next) => {
       new ErrorResponse(
         `No bootcamp with the id of ${req.params.bootcampId}`,
         404
+      )
+    );
+  }
+
+  if (bootcamp.publisher != currentUser.id && currentUser.role != "admin") {
+    return next(
+      new ErrorResponse(
+        `User with ID: ${currentUser.id} is not authorized to add course to Bootcamp with ID: ${bootcamp.id}`,
+        403
       )
     );
   }
@@ -67,13 +79,32 @@ const addCourse = asyncHandler(async (req, res, next) => {
     @access  Private
 */
 const updateCourse = asyncHandler(async (req, res, next) => {
-  let course = await Course.findById(req.params.id);
+  // Current User
+  const currentUser = req.user;
+
+  let course = await Course.findById(req.params.id).populate({
+    path: "bootcamp",
+    select: "publisher"
+  });
 
   if (!course) {
     return next(
       new ErrorResponse(
         `No course with the id of ${req.params.bootcampId}`,
         404
+      )
+    );
+  }
+
+  // checking for ownership
+  if (
+    course.bootcamp.publisher != currentUser.id &&
+    currentUser.role != "admin"
+  ) {
+    return next(
+      new ErrorResponse(
+        `User with ID: ${currentUser.id} is not authorized to update course of Bootcamp with ID: ${course.bootcamp.id}`,
+        403
       )
     );
   }
@@ -95,11 +126,30 @@ const updateCourse = asyncHandler(async (req, res, next) => {
     @access  Private
 */
 const deleteCourse = asyncHandler(async (req, res, next) => {
-  const course = await Course.findById(req.params.id);
+  // Current User
+  const currentUser = req.user;
+
+  const course = await Course.findById(req.params.id).populate({
+    path: "bootcamp",
+    select: "publisher"
+  });
 
   if (!course) {
     return next(
       new ErrorResponse(`No Course found with ID : ${req.params.id}`, 404)
+    );
+  }
+
+  // checking for ownership
+  if (
+    course.bootcamp.publisher != currentUser.id &&
+    currentUser.role != "admin"
+  ) {
+    return next(
+      new ErrorResponse(
+        `User with ID: ${currentUser.id} is not authorized to delete course of Bootcamp with ID: ${course.bootcamp.id}`,
+        403
+      )
     );
   }
 
