@@ -18,7 +18,7 @@ router
   .get(
     advanceQuery(Course, {
       path: "bootcamp",
-      select: "name description"
+      select: "name description publisher"
     }),
     getAllCourses
   )

@@ -34,6 +34,9 @@ const advanceQuery = (model, populate) => async (req, res, next) => {
   queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
 
   req.query = JSON.parse(queryStr);
+  if (req.params.bootcampId) {
+    req.query.bootcamp = req.params.bootcampId;
+  }
 
   const results = await model
     .find(req.query)
