@@ -35,7 +35,7 @@ const protect = asyncHandler(async (req, res, next) => {
 });
 
 // Only Authenticate specific roles
-const authenticateRoles = roles => (req, res, next) => {
+const authenticateRoles = (...roles) => (req, res, next) => {
   if (!roles.includes(req.user.role)) {
     return next(
       new ErrorResponse(
