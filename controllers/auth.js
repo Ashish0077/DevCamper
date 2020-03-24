@@ -68,6 +68,29 @@ const getMe = asyncHandler(async (req, res, next) => {
   });
 });
 
+  /* 
+      @desc    reset password
+      @route   POST /api/v1/auth/forgetpassword
+      @access  Private
+  */
+const forgotPassword = asyncHandler(async (req, res, next) => {
+  const user = await User.findOne({ email: req.body.email});
+
+  if (!user) {
+    return next(new ErrorResponse("There is no user with this email", 404));
+  }
+
+  // get reset method
+  const resetToken = user.getResetPasswordToken();
+
+  await user.save({ validateBeforeSave: false })
+
+  res.status(200).json({
+    success: true,
+    data: user
+  });
+});
+
 // Get token from the model, create cookie and send response
 function sendTokenResponse(user, statusCode, res) {
   // create token
@@ -97,5 +120,6 @@ function sendTokenResponse(user, statusCode, res) {
 module.exports = {
   registerUser,
   loginUser,
-  getMe
+  getMe,
+  forgotPassword
 };
