@@ -2,6 +2,7 @@ const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middleware/asyncHandler");
 const User = require("../models/User");
 const sendEmail = require("../utils/sendEmail");
+const crypto = require("crypto");
 
 /* 
     @desc    Register User
@@ -70,9 +71,9 @@ const getMe = asyncHandler(async (req, res, next) => {
 });
 
 /* 
-      @desc    reset password
+      @desc    Forgot Password
       @route   POST /api/v1/auth/forgetpassword
-      @access  Private
+      @access  public
   */
 const forgotPassword = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
@@ -89,7 +90,7 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
   // create reset URL
   const resetUrl = `${req.protocol}://${req.get(
     "host"
-  )}/api/v1/resetpassword/${resetToken}`;
+  )}/api/v1/auth/resetpassword/${resetToken}`;
 
   const message = `You are receiving this email because you (or someone else) has requested the reset of a password, Please make a PUT request to \n\n ${resetUrl}`;
 
@@ -107,12 +108,42 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
   } catch (error) {
     console.log(error);
     user.resetPasswordToken = undefined;
-    user.resetPasswordExpire = undefined;
+    user.resetPasswordTokenExpire = undefined;
 
     await user.save({ validateBeforeSave: false });
 
     return next(new ErrorResponse("Email Could not be sent", 500));
   }
+});
+
+/* 
+    @desc    Reset Password
+    @route   PUT /api/v1/auth/resetpassword/:resettoken
+    @access  Private
+*/
+const resetPassword = asyncHandler(async (req, res, next) => {
+  //get Hashed Token
+  const resetToken = crypto
+    .createHash("sha256")
+    .update(req.params.resettoken)
+    .digest("hex");
+
+  const user = await User.findOne({
+    resetPasswordToken: resetToken,
+    resetPasswordTokenExpire: { $gt: Date.now() }
+  });
+
+  if (!user) {
+    return next(new ErrorResponse("Invalid Token", 400));
+  }
+
+  // set new password
+  user.password = req.body.password;
+  user.resetPasswordTokenExpire = undefined;
+  user.resetPasswordToken = undefined;
+  await user.save();
+
+  sendTokenResponse(user, 200, res);
 });
 
 // Get token from the model, create cookie and send response
@@ -145,5 +176,6 @@ module.exports = {
   registerUser,
   loginUser,
   getMe,
-  forgotPassword
+  forgotPassword,
+  resetPassword
 };
