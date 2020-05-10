@@ -6,7 +6,9 @@ const { protect, authenticateRoles } = require("../middleware/auth");
 const {
   getAllReviews,
   getReview,
-  addReview
+  addReview,
+  updateReview,
+  deleteReview
 } = require("../controllers/reviews");
 
 const router = express.Router({ mergeParams: true });
@@ -22,6 +24,10 @@ router
   )
   .post(protect, authenticateRoles("user", "admin"), addReview);
 
-router.route("/:id").get(getReview);
+router
+  .route("/:id")
+  .get(getReview)
+  .put(protect, authenticateRoles("user", "admin"), updateReview)
+  .delete(protect, authenticateRoles("user", "admin"), deleteReview);
 
 module.exports = router;
