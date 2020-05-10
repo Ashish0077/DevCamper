@@ -203,7 +203,7 @@ const uploadBootcampPhoto = asyncHandler(async (req, res, next) => {
   if (bootcamp.publisher != currentUser.id && currentUser.role != "admin") {
     return next(
       new ErrorResponse(
-        `User with ID: ${currentUser.id} is not authorized for deleting bootcamp with ID: ${bootcamp.id}`,
+        `User with ID: ${currentUser.id} is not authorized for updating photo of bootcamp with ID: ${bootcamp.id}`,
         403
       )
     );
