@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const morgon = require("morgan");
 const colors = require("colors");
 const connectDB = require("./config/db");
+const mongoSanitize = require("express-mongo-sanitize")
 const errorHandler = require("./middleware/error");
 const fileUpload = require("express-fileupload");
 const path = require("path");
@@ -39,6 +40,9 @@ app.use(express.json());
 
 // cookie parser
 app.use(cookieParser());
+
+// sanitize data
+app.use(mongoSanitize());
 
 const PORT = process.env.PORT || 3000;
 
