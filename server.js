@@ -12,6 +12,7 @@ const helmet = require("helmet");
 const xssClean = require("xss-clean");
 const rateLimit = require("express-rate-limit");
 const hpp = require("hpp");
+const cors = require("cors");
 
 // Load Environemnt Variables
 dotenv.config({ path: "./config/config.env" });
@@ -63,6 +64,9 @@ app.use(limiter);
 
 // prevent HTTP-parameter-pollution attack
 app.use(hpp());
+
+// enabling Cross-origin resource sharing
+app.use(cors());
 
 const PORT = process.env.PORT || 3000;
 
