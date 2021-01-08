@@ -60,7 +60,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
 /* 
     @desc    Log User Out / Clear Token Cookie
     @route   GET /api/v1/auth/logout
-    @access  Private
+    @access  Public
 */
 const logoutUser = asyncHandler(async (req, res, next) => {
   res.cookie('token', 'none', {
