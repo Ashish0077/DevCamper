@@ -8,6 +8,7 @@ const errorHandler = require("./middleware/error");
 const fileUpload = require("express-fileupload");
 const path = require("path");
 const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
 
 // Load Environemnt Variables
 dotenv.config({ path: "./config/config.env" });
@@ -43,6 +44,9 @@ app.use(cookieParser());
 
 // sanitize data
 app.use(mongoSanitize());
+
+// setting security header
+app.use(helmet());
 
 const PORT = process.env.PORT || 3000;
 
