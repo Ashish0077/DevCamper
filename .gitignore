@@ -1,6 +1,6 @@
 # ignore these folders/files
 node_modules/
-config/
+config/*
 _data/*
 .vscode/
 
@@ -8,3 +8,5 @@ _data/*
 !_data/bootcamps.json
 !_data/courses.json
 !_data/users.json
+!_data/reviews.json
+!config/db.js
