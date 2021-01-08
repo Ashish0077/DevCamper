@@ -33,3 +33,9 @@ It cleans the whole DB by removing everything
 ```
 node seeder -destroy
 ```
+
+# Documentation
+documentation [here](https://documenter.getpostman.com/view/10568626/TVzPky3i)
+
+- Version: 1.0.0
+- Author: Ashish Arora
