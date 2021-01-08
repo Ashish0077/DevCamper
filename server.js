@@ -9,6 +9,7 @@ const fileUpload = require("express-fileupload");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
+const xssClean = require("xss-clean");
 
 // Load Environemnt Variables
 dotenv.config({ path: "./config/config.env" });
@@ -47,6 +48,9 @@ app.use(mongoSanitize());
 
 // setting security header
 app.use(helmet());
+
+// prevent XSS attack
+app.use(xssClean());
 
 const PORT = process.env.PORT || 3000;
 
