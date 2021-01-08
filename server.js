@@ -10,6 +10,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
 const xssClean = require("xss-clean");
+const rateLimit = require("express-rate-limit")
 
 // Load Environemnt Variables
 dotenv.config({ path: "./config/config.env" });
@@ -51,6 +52,14 @@ app.use(helmet());
 
 // prevent XSS attack
 app.use(xssClean());
+
+// rate limiter
+const limiter = rateLimit({
+  windowMs: 10*60*1000, // 10mins
+  max: 100
+})
+
+app.use(limiter);
 
 const PORT = process.env.PORT || 3000;
 
