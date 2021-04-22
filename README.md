@@ -15,8 +15,8 @@ Hosted [HERE](https://dev-camp-api.herokuapp.com/)
 * Rename the config/config.env.example --> config.env.pem
 * Provide ```NODE_ENV```, ```PORT```, ```TOKEN_ISSUER``` , ```TOKEN_AUDIENCE```, ```MONGO_URI```, ```GEOCODER_API_KEY```, ```JWT_SECRET```, ```SMTP_PORT```, ```SMTP_EMAIL```, ```SMTP_PASSWORD``` in **config/config.env** file
 * Execute the following commands for database seeding:
-  * For import data ```node seeder --import```
-  * For deleting data ```node seeder --delete```
+  * For import data ```node seeder -import```
+  * For deleting data ```node seeder -destroy```
 * Execute `npm start`
 
  ## Project Directory Structure
