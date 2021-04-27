@@ -4,9 +4,7 @@ DevCamper API written in Node, Express and MongoDB.
 <br>
 Hosted [HERE](https://dev-camp-api.herokuapp.com/)
 
-<p>
-    <img src="https://github.com/Ashish0077/DevCamper/blob/master/github_assets/banner.png">
-</p>
+![](github_assets/banner.png)
 
 ## How to build and run this project
 * Clone this repository.
