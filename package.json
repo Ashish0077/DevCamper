@@ -27,7 +27,7 @@
     "mongoose": "^5.9.2",
     "morgan": "^1.9.1",
     "node-geocoder": "^3.25.0",
-    "nodemailer": "^6.4.6",
+    "nodemailer": "^6.4.16",
     "nodemon": "^2.0.7",
     "slugify": "^1.4.0",
     "xss-clean": "^0.1.1"
